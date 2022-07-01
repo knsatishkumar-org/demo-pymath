@@ -2,27 +2,42 @@ from datetime import datetime
 from flask import Flask, render_template
 from . import app
 
-@app.route("/")
-def home():
-    return render_template("home.html")
+@app.route("/") 
+def index():
+    return '<a href="/calc">calc</a>'
 
-@app.route("/about/")
-def about():
-    return render_template("about.html")
+@app.route("/calc", methods=['GET'] )
+def calc_get():
+    return '''<form method="POST" action="/calc">
+        <input name="a">
+        <br>
+        <input name="b">
+        <br>
+        <label for="cars">Choose a operation</label>
+        <br>
+        <select name="operations" id="operations">
+          <option value="addition">Addition</option>
+          <option value="subtraction">Subtraction</option>
+          <option value="multiplication">Multiplication</option>
+          <option value="division">Division</option>
+        </select>
+        <input type="submit" value="Compute">
+        </form>'''
 
-@app.route("/contact/")
-def contact():
-    return render_template("contact.html")
 
-@app.route("/hello/")
-@app.route("/hello/<name>")
-def hello_there(name = None):
-    return render_template(
-        "hello_there.html",
-        name=name,
-        date=datetime.now()
-    )
+@app.route("/calc", methods=['POST'] )
+def calc_post():
+    a = request.form.get('a', '0')
+    b = request.form.get('b', '0')
+    c = request.form.get('operations')
+    
+    if c == 'addition':
+     result = float(a) + float(b)
+    elif c == 'subtraction':
+     result = float(a) - float(b)
+    elif c == 'multiplication':
+     result = float(a) * float(b)
+    elif c == 'multiplication':
+     result = float(a) / float(b)
+    return str(result)
 
-@app.route("/api/data")
-def get_data():
-    return app.send_static_file("data.json")
