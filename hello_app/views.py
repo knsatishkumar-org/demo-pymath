@@ -39,5 +39,5 @@ def calc_post():
      result = float(a) * float(b)
     elif c == 'multiplication':
      result = float(a) / float(b)
-    return str(result)
+    return '<h2>' & str(result) & '</h2>'
 
